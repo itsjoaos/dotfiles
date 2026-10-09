@@ -1,9 +1,9 @@
-vim.cmd("set expandtab")
-vim.cmd("set tabstop=2")
-vim.cmd("set shiftwidth=2")
+vim.opt.expandtab = true
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
 
-vim.cmd("set number")
-vim.cmd("set relativenumber")
+vim.opt.number = true
+vim.opt.relativenumber = true
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -28,7 +28,7 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-tmux_navigator = {
+local tmux_navigator = {
   "christoomey/vim-tmux-navigator",
   cmd = {
     "TmuxNavigateLeft",
@@ -36,6 +36,7 @@ tmux_navigator = {
     "TmuxNavigateUp",
     "TmuxNavigateRight",
     "TmuxNavigatePrevious",
+    "TmuxNavigatorProcessList",
   },
   keys = {
     { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
@@ -48,10 +49,15 @@ tmux_navigator = {
 
 -- Setup lazy.nvim
 require("lazy").setup({
-  { "rose-pine/neovim", name = "rose-pine" },
-  tmux_navigator,
+  spec = {
+    { "rose-pine/neovim", name = "rose-pine" },
+    tmux_navigator,
+  },
+  -- colorscheme that will be used when installing plugins.
+  install = { colorscheme = { "rose-pine", "habamax" } },
+  -- none of the plugins need luarocks
+  rocks = { enabled = false },
 })
 
 require("rose-pine").setup()
 vim.cmd("colorscheme rose-pine")
-

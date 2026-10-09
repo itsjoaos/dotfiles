@@ -2,3 +2,7 @@ theme = dark:Rose Pine,light:Rose Pine Dawn
 
 window-height = 50
 window-width = 161
+
+# Keep the default block cursor at the shell prompt too
+# (shell integration otherwise switches it to a bar there)
+shell-integration-features = no-cursor

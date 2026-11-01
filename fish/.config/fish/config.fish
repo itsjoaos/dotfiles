@@ -2,8 +2,13 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
-# Disable the welcome message
-set -g fish_greeting
+# Show fastfetch instead of the welcome message, only directly in Ghostty
+# (TERM_PROGRAM is "tmux" inside tmux, so new panes stay quiet)
+function fish_greeting
+    if test "$TERM_PROGRAM" = ghostty; and command -q fastfetch
+        fastfetch
+    end
+end
 
 fish_config theme choose "Rosé Pine"
 

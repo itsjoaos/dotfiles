@@ -8,6 +8,7 @@ Each top-level directory is a Stow **package** whose contents mirror their locat
 | ---------- | ----------- | ----------- |
 | `fish`     | `~/.config/fish/config.fish`, `~/.config/fish/themes/Rosé Pine.theme` | [fish](https://fishshell.com) shell |
 | `ghostty`  | `~/.config/ghostty/config.ghostty` | [Ghostty](https://ghostty.org) terminal |
+| `hushlogin` | `~/.hushlogin` | Hides the "Last login" line macOS prints when a terminal opens |
 | `nvim`     | `~/.config/nvim/init.lua`, `~/.config/nvim/lazy-lock.json` | [Neovim](https://neovim.io) |
 | `starship` | `~/.config/starship.toml` | [Starship](https://starship.rs) prompt |
 | `tmux`     | `~/.config/tmux/tmux.conf` | [tmux](https://github.com/tmux/tmux) |
@@ -21,7 +22,7 @@ Tested with: fish 4.9.3, Ghostty 1.3.1, Neovim 0.12.5, Starship 1.26.0, tmux 3.8
 On macOS with [Homebrew](https://brew.sh):
 
 ```bash
-brew install stow fish neovim starship tmux git && brew install --cask ghostty
+brew install stow fish neovim starship tmux fastfetch git && brew install --cask ghostty
 ```
 
 On Linux, install the same packages with your distribution's package manager (see [ghostty.org](https://ghostty.org/download) for Ghostty). Skip any you already have.
@@ -47,7 +48,7 @@ Stow links packages into the **parent** of the directory you run it from, so fro
 Stow refuses to overwrite real files. Preview what would happen first:
 
 ```bash
-cd ~/dotfiles && stow -n -v fish ghostty nvim starship tmux
+cd ~/dotfiles && stow -n -v fish ghostty hushlogin nvim starship tmux
 ```
 
 If it reports a conflict (for example `cannot stow ... over existing target`), a file already exists where Stow wants to create a link. A fresh install of fish usually creates `~/.config/fish/config.fish`, for instance. Compare each conflicting file with the repo version, keep anything you need, then move it out of the way rather than deleting it:
@@ -75,14 +76,14 @@ mkdir -p ~/dotfiles-backup && mv ~/.tmux.conf ~/dotfiles-backup/
 ### 2. Stow the packages
 
 ```bash
-cd ~/dotfiles && stow -v fish ghostty nvim starship tmux
+cd ~/dotfiles && stow -v fish ghostty hushlogin nvim starship tmux
 ```
 
 You can also stow a single package, e.g. `stow nvim`.
 
 ### 3. Per-application setup
 
-**fish**: fish runs only inside Ghostty and tmux. Your login shell stays as it is (zsh by default on macOS), so scripts, coding agents and other tools that use `$SHELL` keep getting a POSIX shell. Don't use `chsh` to switch to fish. The config turns off the greeting, loads the Rosé Pine theme, and starts Starship with transient prompts.
+**fish**: fish runs only inside Ghostty and tmux. Your login shell stays as it is (zsh by default on macOS), so scripts, coding agents and other tools that use `$SHELL` keep getting a POSIX shell. Don't use `chsh` to switch to fish. The config loads the Rosé Pine theme and starts Starship with transient prompts. Instead of fish's welcome message, it runs [fastfetch](https://github.com/fastfetch-cli/fastfetch) when fish starts directly in Ghostty (new windows, tabs and splits), but not inside tmux or other terminals.
 
 **Ghostty**: Ghostty starts fish through a machine-specific `command` setting. Apps opened from the Dock get a minimal `PATH`, so it needs fish's full path. Put it in `config.local.ghostty`, which `config.ghostty` includes and git ignores:
 

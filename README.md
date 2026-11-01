@@ -82,21 +82,15 @@ You can also stow a single package, e.g. `stow nvim`.
 
 ### 3. Per-application setup
 
-**Ghostty**: quit and reopen Ghostty, or reload its config with <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>,</kbd>. It follows your system's light/dark mode, switching between Rosé Pine and Rosé Pine Dawn. It runs your login shell, so set fish as your login shell (below).
+**fish**: fish runs only inside Ghostty and tmux. Your login shell stays as it is (zsh by default on macOS), so scripts, coding agents and other tools that use `$SHELL` keep getting a POSIX shell. Don't use `chsh` to switch to fish. The config turns off the greeting, loads the Rosé Pine theme, and starts Starship with transient prompts.
 
-**fish**: to make fish your login shell, it must be listed in `/etc/shells`. Check with `grep fish /etc/shells`, and if it's missing, add it:
-
-```bash
-command -v fish | sudo tee -a /etc/shells
-```
-
-Then change your shell:
+**Ghostty**: Ghostty starts fish through a machine-specific `command` setting. Apps opened from the Dock get a minimal `PATH`, so it needs fish's full path. Put it in `config.local.ghostty`, which `config.ghostty` includes and git ignores:
 
 ```bash
-chsh -s "$(command -v fish)"
+echo "command = $(command -v fish)" > ~/.config/ghostty/config.local.ghostty
 ```
 
-tmux starts your login shell, so until you do this new tmux panes open your previous shell. The config turns off the greeting, loads the Rosé Pine theme, and starts Starship with transient prompts.
+Then quit and reopen Ghostty, or reload its config with <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>,</kbd> and open a new window. Ghostty follows your system's light/dark mode, switching between Rosé Pine and Rosé Pine Dawn.
 
 **Neovim**: the first launch bootstraps [lazy.nvim](https://github.com/folke/lazy.nvim) and installs the plugins (`rose-pine`, `vim-tmux-navigator`) at the versions pinned in `lazy-lock.json`.
 
@@ -106,7 +100,7 @@ tmux starts your login shell, so until you do this new tmux panes open your prev
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 
-Then start tmux and press `prefix` + <kbd>I</kbd> (the prefix is <kbd>Ctrl</kbd>+<kbd>b</kbd> by default) to install the plugins (`tmux-sensible`, `rose-pine/tmux`, `vim-tmux-navigator`). Reload the config at any time with `prefix` + <kbd>r</kbd>.
+New panes start fish (`default-command` in `tmux.conf`), while tmux's own shell stays your login shell. Start tmux and press `prefix` + <kbd>I</kbd> (the prefix is <kbd>Ctrl</kbd>+<kbd>b</kbd> by default) to install the plugins (`tmux-sensible`, `rose-pine/tmux`, `vim-tmux-navigator`). Reload the config at any time with `prefix` + <kbd>r</kbd>.
 
 > tpm normally installs plugins next to `~/.config/tmux/tmux.conf`. With Stow, that location is a link into this repo, so `tmux.conf` sets `TMUX_PLUGIN_MANAGER_PATH` to keep tpm and all plugins in `~/.tmux/plugins/` instead.
 

@@ -6,3 +6,7 @@ window-width = 161
 # Keep the default block cursor at the shell prompt too
 # (shell integration otherwise switches it to a bar there)
 shell-integration-features = no-cursor
+
+# Machine-specific settings (not tracked in git), e.g. the full path to fish:
+#   command = /usr/local/bin/fish
+config-file = ?config.local.ghostty

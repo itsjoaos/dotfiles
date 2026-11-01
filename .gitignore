@@ -1,1 +1,4 @@
 .DS_Store
+
+# Machine-specific Ghostty settings
+ghostty/.config/ghostty/config.local.ghostty
